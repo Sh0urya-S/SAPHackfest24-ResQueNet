@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map with Routing Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="map"></div>
+        <div id="directions">
+            <div id="instructions">Routing details will appear here...</div>
+            <button id="prev-button" class="Btn">Previous</button>
+            <button id="next-button" class="Btn">Next</button>
+        </div>
+    </div>
+    <button id="refresh-button" class="Btn">Refresh to Next Batch</button>
+    <script>
+        var map = L.map('map').setView([17.665462, 83.216487], 12);
+        var centralPoint = L.latLng(17.665462, 83.216487);
+        var control;
+        var markersLayer = L.layerGroup().addTo(map);
+        var allMarkers = [];
+        var currentIndex = -1; // Start with the "Complete Route" view
+        var instructionsList = [];
+        var waypoints = [];
+        var newPointsQueue = [];
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        function fetchMarkers() {
+            return fetch('fetch_coordinates.php')
+                .then(response => response.json())
+                .then(data => data.map(point => L.latLng(point.latitude, point.longitude)))
+                .catch(err => console.error('Error fetching coordinates:', err));
+        }
+
+        function updateInstructions() {
+            var instructionsContainer = document.getElementById('instructions');
+            var prevButton = document.getElementById('prev-button');
+            var nextButton = document.getElementById('next-button');
+
+            instructionsContainer.innerHTML = '';
+            if (currentIndex === -1) {
+                instructionsContainer.innerHTML = '<h3>Complete Route</h3>';
+                prevButton.style.display = 'none';
+            } else {
+                prevButton.style.display = 'block';
+                if (instructionsList.length > 0) {
+                    var steps = instructionsList[currentIndex];
+                    var instructionsHtml = `<h3>Directions to Destination ${currentIndex + 1}</h3><ul>`;
+                    steps.forEach(step => {
+                        instructionsHtml += `<li>${step.text} (${Math.round(step.distance)} meters)</li>`;
+                    });
+                    instructionsHtml += '</ul>';
+                    instructionsContainer.innerHTML = instructionsHtml;
+                } else {
+                    instructionsContainer.innerHTML = 'Routing details will appear here...';
+                }
+            }
+
+            if (currentIndex >= instructionsList.length - 1) {
+                nextButton.style.display = 'none';
+            } else {
+                nextButton.style.display = 'block';
+            }
+        }
+
+        function createCustomIcon(color) {
+            return L.divIcon({
+                className: `custom-icon ${color}-icon`,
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                html: `<div style="background-color:${color}; width:24px; height:24px; border-radius:50%;"></div>`
+            });
+        }
+
+        function updateRoute() {
+            if (control) {
+                map.removeControl(control);
+            }
+
+            if (currentIndex === -1) {
+                // Show all markers for the complete route
+                markersLayer.clearLayers();
+                allMarkers.forEach(marker => marker.addTo(markersLayer));
+
+                control = L.Routing.control({
+                    waypoints: waypoints,
+                    router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                    createMarker: function() { return null; },
+                    routeWhileDragging: false,
+                    lineOptions: {
+                        styles: [{ color: 'blue', weight: 5 }]
+                    },
+                    showAlternatives: false
+                }).addTo(map);
+            } else {
+                // Show only start and end markers for the current route segment
+                markersLayer.clearLayers();
+
+                if (waypoints.length > 1 && currentIndex < waypoints.length - 1) {
+                    var startMarker = L.marker(waypoints[currentIndex], { icon: createCustomIcon('black') }).addTo(markersLayer);
+                    var endMarker = L.marker(waypoints[currentIndex + 1], { icon: createCustomIcon('green') }).addTo(markersLayer);
+
+                    allMarkers = [startMarker, endMarker];
+                }
+
+                control = L.Routing.control({
+                    waypoints: [waypoints[currentIndex], waypoints[currentIndex + 1]],
+                    router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                    createMarker: function() { return null; },
+                    routeWhileDragging: false,
+                    lineOptions: {
+                        styles: [{ color: 'blue', weight: 5 }]
+                    },
+                    showAlternatives: false
+                }).addTo(map);
+            }
+        }
+
+        function initializeMap(newPoints) {
+            markersLayer.clearLayers();
+            if (control) {
+                map.removeControl(control);
+            }
+
+            waypoints = [centralPoint].concat(newPoints);
+
+            // Update all markers for the complete route initially
+            allMarkers = [
+                L.marker(centralPoint, { icon: createCustomIcon('red') }).addTo(markersLayer),
+                ...newPoints.map(point => L.marker(point, { icon: createCustomIcon('blue') }).addTo(markersLayer))
+            ];
+
+            control = L.Routing.control({
+                waypoints: waypoints,
+                router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                createMarker: function() { return null; },
+                routeWhileDragging: false,
+                lineOptions: {
+                    styles: [{ color: 'blue', weight: 5 }]
+                },
+                showAlternatives: false
+            }).addTo(map);
+
+            control.on('routesfound', function(e) {
+                var routes = e.routes[0];
+                instructionsList = routes.instructions.reduce((acc, instruction) => {
+                    var last = acc[acc.length - 1];
+                    if (last && last.length > 0 && instruction.type === 'WaypointReached') {
+                        acc.push([]);
+                    } else {
+                        if (!last) {
+                            acc.push([]);
+                        }
+                        acc[acc.length - 1].push(instruction);
+                    }
+                    return acc;
+                }, []);
+                currentIndex = -1;
+                updateInstructions();
+                updateRoute(); // Ensure complete route is shown
+            });
+        }
+
+        function fetchNewMarkers() {
+            fetch('fetch_coordinates.php')
+                .then(response => response.json())
+                .then(data => {
+                    var newMarkers = data.map(point => L.latLng(point.latitude, point.longitude));
+                    if (newMarkers.length > 0) {
+                        newPointsQueue.push(newMarkers);
+                    }
+                })
+                .catch(err => console.error('Error fetching new coordinates:', err));
+        }
+
+        setInterval(fetchNewMarkers, 300000); // Fetch new markers every 5 minutes
+
+        document.getElementById('refresh-button').addEventListener('click', function() {
+            if (newPointsQueue.length > 0) {
+                var newPoints = newPointsQueue.shift();
+                initializeMap(newPoints);
+            } else {
+                alert("No new coordinates available.");
+            }
+        });
+
+        document.getElementById('prev-button').addEventListener('click', function() {
+            if (currentIndex > -1) {
+                currentIndex--;
+                updateInstructions();
+                updateRoute();
+            }
+        });
+
+        document.getElementById('next-button').addEventListener('click', function() {
+            if (currentIndex < instructionsList.length - 1) {
+                currentIndex++;
+                updateInstructions();
+                updateRoute();
+            }
+        });
+
+        // Initialize the map on page load with the first batch of markers
+        fetchMarkers().then(initializeMap);
+    </script>
+</body>
+</html>

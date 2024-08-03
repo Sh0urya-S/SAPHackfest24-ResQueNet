@@ -1,0 +1,132 @@
+/* Page background color */
+/* sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ */
+body {
+    background-color: #c0c0c0; /* Light gray background */
+    margin: 0;
+    font-family: Arial, sans-serif; /* Set a default font for the entire page */
+}
+/* Container for map and directions pane */
+#container {
+    display: flex;
+    height: 650px;
+    border: 2px solid #ddd; /* Add border around the container */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow for depth */
+    overflow: hidden; /* Ensure content doesn’t overflow */
+}
+
+/* Map container */
+#map {
+    flex: 1;
+    border-right: 2px solid #ddd; /* Border between map and directions */
+    border-radius: 20px 20px 20px 20px;
+}
+
+/* Directions pane */
+#directions {
+    width: 300px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    overflow: auto;
+    border-left: 2px solid #ddd; /* Border between map and directions */
+    border-radius: 20px 20px 20px 20px; /* Rounded corners for directions pane */
+    box-shadow: 4px 0 8px rgba(0,0,0,0.1); /* Shadow for depth */
+    font-family: Arial, sans-serif; /* Improved font */
+}
+
+/* Font and spacing improvements */
+h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Hide default routing controls */
+.leaflet-routing-alt {
+    display: none;
+}
+
+.leaflet-routing-container {
+    display: none;
+}
+
+/* Refresh button styling */
+#refresh-button,#prev-button,#next-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto; /* Adjusted margin */
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center; /* Center text */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Shadow for depth */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+#refresh-button:hover {
+    background-color: #0056b3;
+}
+
+
+.btn {
+  font-size: 17px;
+  background: transparent;
+  border: none;
+  padding: 1em 1.5em;
+  color: #ffedd3;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #ffc506;
+  transition: 0.5s ease;
+}
+
+.btn:hover {
+  color: #1e1e2b;
+  transition-delay: 0.5s;
+}
+
+.btn:hover::before {
+  width: 100%;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #ffc506;
+  transition: 0.4s ease;
+  z-index: -1;
+}
+
+.btn:hover::after {
+  height: 100%;
+  transition-delay: 0.4s;
+  color: aliceblue;
+}

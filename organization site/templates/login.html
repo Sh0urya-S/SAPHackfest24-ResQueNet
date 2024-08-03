@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResqueNet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <meta name="google-signin-client_id" content="378647268629-vd9gdhfco2g82ph29t72uq7sml3gdjda.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+    <nav>
+        <img src="..\static\images\logo.png" alt="Your Company Logo" class="logo">
+    </nav>
+
+    <div id="loginDialog" class="dialog" style="display:block;">
+        <span class="close" onclick="closeDialog('loginDialog')">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" action="#">
+            <label for="phoneLogin">Phone Number:</label>
+            <input type="text" id="phonelogin" name="phone" required><br><br>
+            <label for="passwordlogin">Password:</label>
+            <input type="text" id="passwordlogin" name="password" required><br><br>
+            <button type="submit">Login</button>
+            <p id="error-messagee" style="color:red; font-weight: bold;"></p>
+            <p>create account <a id="signupBtn">click here</a></p>
+            
+            <p>or sign in using</p>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </form>
+    </div>
+
+    <div id="signupDialog" class="dialog">
+        <span class="close" onclick="closeDialog('signupDialog')">&times;</span>
+        <h2>Signup</h2>
+        <form id="signupForm">
+            <label for="ngoName">NGO Name:</label>
+            <input type="text" id="ngoName" name="ngoName" required><br><br>
+            <label>Services Provided:</label><br>
+            <div class="checkbox-container">
+                <input type="checkbox" id="food" name="service" value="food&nutrition">
+                <label for="food">Food</label>
+                <input type="checkbox" id="medics" name="service" value="medical">
+                <label for="medics">Medics</label>
+                <input type="checkbox" id="water" name="service" value="water">
+                <label for="water">Water</label>
+                <input type="checkbox" id="water" name="service" value="sanitary">
+                <label for="water">Sanitary</label>
+            </div>
+            <br><br>
+            <label for="phoneSignup">Phone Number:</label>
+            <input type="text" id="phoneSignup" name="phone" required><br><br>
+            <label for="passwordLogin">Password:</label>
+            <input type="text" id="passwordsignup" name="password" required><br><br>
+            <label for="goal">Goal:</label>
+            <textarea id="goal" name="goal" required></textarea><br><br>
+            <label for="legalRecords">Legal Records:</label>
+            <input type="file" id="legalRecords" name="legalRecords" required><br><br>
+            <label for="fundingSource">Source of Funding:</label>
+            <textarea id="fundingSource" name="fundingSource"required></textarea><br><br>
+            <label for="achievements">Achievements:</label>
+            <textarea id="achievements" name="achievements"required></textarea><br><br>
+        
+
+
+            <button type="submit">Signup</button>
+        </form>
+        <p id="error-check" style="display:none; color:red">
+            Invalid Captcha
+        <p id="error-message" style="display:none;">
+            Registration Successful. <a onclick="openlogin('loginDialog')" style="text-decoration: underline; color: red; cursor:pointer;">login here</a>
+        </p>   
+         
+    </div>
+
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+</html>

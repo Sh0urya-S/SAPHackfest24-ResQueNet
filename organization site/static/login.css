@@ -1,0 +1,211 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #cbbeb5;
+    color: #fff;
+}
+
+nav button {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+.logo {
+    width: 80px;
+    height: 80px;
+  }
+
+nav button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#loginDialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    border:3px solid #fff2ea;
+}
+
+#signupDialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 600px;
+    width: 400px;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    overflow-y: auto;
+    border:3px solid #fff2ea;
+    scrollbar-color:  #fff2ea;
+}
+
+.dialog h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.dialog .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.dialog .close:hover {
+    color: red;
+}
+
+/* Login Form */
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#loginForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="file"] {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#loginForm textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Signup Form  */
+.dialog.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+h2 {
+    text-align: center;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+legend {
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="tel"],
+textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.checkbox-container {
+    display: flex;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
+#buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+#buttons button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#captchaSubmitButton {
+    background-color: #fff2ea;
+    color: white;
+}
+
+#refreshButton {
+    background-color: black;
+    color: black;
+}
+
+#output {
+    margin-top: 5px;
+}
+
+button[type="submit"] {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+#captcha{
+    margin: -50px;
+}
+
+#signupBtn{
+    color: red;
+    text-decoration: underline;
+    cursor: pointer;
+}
