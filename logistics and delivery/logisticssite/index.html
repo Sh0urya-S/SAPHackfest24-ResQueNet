@@ -94,7 +94,7 @@
 
                 control = L.Routing.control({
                     waypoints: waypoints,
-                    router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                    router: L.Routing.mapbox('API_TOKEN'), //replace with your mapbox api token
                     createMarker: function() { return null; },
                     routeWhileDragging: false,
                     lineOptions: {
@@ -115,7 +115,7 @@
 
                 control = L.Routing.control({
                     waypoints: [waypoints[currentIndex], waypoints[currentIndex + 1]],
-                    router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                    router: L.Routing.mapbox('API_TOKEN'), //replace with your mapbox api token
                     createMarker: function() { return null; },
                     routeWhileDragging: false,
                     lineOptions: {
@@ -142,7 +142,7 @@
 
             control = L.Routing.control({
                 waypoints: waypoints,
-                router: L.Routing.mapbox('sk.eyJ1Ijoic2hvdXJ5YWZ0dyIsImEiOiJjbHlzcjZ0MDMwZnd3MmtxbG5oN3BqdTl5In0.UcpO312zoQ9p72bMnS3NGQ'),
+                router: L.Routing.mapbox('API_TOKEN'), //replace with your mapbox api token
                 createMarker: function() { return null; },
                 routeWhileDragging: false,
                 lineOptions: {
